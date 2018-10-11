@@ -16,3 +16,4 @@ build-*
 *.lib
 *.dll
 a.out
+*.pyc
