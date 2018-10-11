@@ -1,0 +1,19 @@
+# macOS artifacts
+.DS_Store
+
+# IDEs / editors
+.vscode/
+*~
+
+# Common cmake build folders
+build/
+build-*
+
+# Usually you don't want to commit binaries
+*.o
+*.so
+*.a
+*.lib
+*.dll
+a.out
+*.pyc
