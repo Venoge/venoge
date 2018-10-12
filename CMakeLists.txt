@@ -10,3 +10,10 @@ find_package(Eigen3 3.3 QUIET REQUIRED)
 
 # Make tests optional
 option(BUILD_TESTS "Build test targets" OFF)
+
+# Ok, time to build some stuff!
+add_subdirectory(venoge)
+
+if (BUILD_TESTS)
+    add_subdirectory(tests)
+endif()
