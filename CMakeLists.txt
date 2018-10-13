@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.11)
 project(Venoge VERSION 0.0.0 LANGUAGES CXX)
 
+# Get the correct target locations among all platforms
+include(GNUInstallDirs)
+
 # Target C++11 for now
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
