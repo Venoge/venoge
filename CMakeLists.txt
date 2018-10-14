@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.10.2)
 project(Venoge VERSION 0.0.0 LANGUAGES CXX)
 
 # Get the correct target locations among all platforms
