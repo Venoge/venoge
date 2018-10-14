@@ -1,0 +1,13 @@
+FROM ubuntu:18.04
+
+RUN apt-get update && \
+    apt-get install -y build-essential \
+                       cmake \
+                       libeigen3-dev
+
+COPY . /root/venoge
+RUN ls /root
+RUN ls /root/venoge
+RUN chmod +x /root/venoge/docker/entrypoint.sh
+
+ENTRYPOINT ["/root/venoge/docker/entrypoint.sh"]
