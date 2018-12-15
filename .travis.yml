@@ -7,35 +7,48 @@ matrix:
       services:
         - docker
       env:
-        - MATRIX_EVAL="BUILD_TARGET=docker_ubuntu_18.04"
-      addons:
-        apt:
-          packages:
-            - libeigen3-dev
+        - BUILD_TARGET=docker_ubuntu_18.04
     - os: osx
-      env:
-        - MATRIX_EVAL="BUILD_TARGET=osx"
       addons:
         homebrew:
           packages:
             - eigen
-
-before_install:
-  - eval "${MATRIX_EVAL}"
+      env:
+        - BUILD_TARGET=osx
+    - os: windows
+      env:
+        - BUILD_TARGET=windows
 
 install:
-  - if [ "${BUILD_TARGET}" = "docker_ubuntu_18.04" ]; then
+  - if [ ${BUILD_TARGET} = docker_ubuntu_18.04 ]; then
       docker build -t build_ubuntu_18.04 -f docker/Dockerfile_ubuntu_18.04 .;
+    fi
+  - if [ ${BUILD_TARGET} = windows ]; then
+      mkdir -p C:\\Program\ Files\\Eigen;
+      curl -L http://bitbucket.org/eigen/eigen/get/3.3.7.tar.bz2 --output C:\\Program\ Files\\Eigen\\eigen-3.3.7.tar.bz2;
+      7z x -oC:\\Program\ Files\\Eigen C:\\Program\ Files\\Eigen\\eigen-3.3.7.tar.bz2;
+      7z x -oC:\\Program\ Files\\Eigen C:\\Program\ Files\\Eigen\\eigen-3.3.7.tar;
+      mkdir C:\\Program\ Files\\Eigen\\eigen-eigen-323c052e1731\\build;
+      cd C:\\Program\ Files\\Eigen\\eigen-eigen-323c052e1731\\build;
+      cmake ..;
+      cmake --build . --target install;
     fi
 
 script:
-  - if [ "${BUILD_TARGET}" = "docker_ubuntu_18.04" ]; then
+  - if [ ${BUILD_TARGET} = docker_ubuntu_18.04 ]; then
       docker run --rm -it build_ubuntu_18.04;
     fi
-  - if [ "${BUILD_TARGET}" = "osx" ]; then
+  - if [ ${BUILD_TARGET} = osx ]; then
       mkdir build &&
       cd build &&
       cmake -DBUILD_TESTS=ON .. &&
       make &&
       ./tests/tests;
+    fi
+  - if [ ${BUILD_TARGET} = windows ]; then
+      mkdir ${TRAVIS_BUILD_DIR}\\build &&
+      cd ${TRAVIS_BUILD_DIR}\\build &&
+      cmake -DBUILD_TESTS=ON .. &&
+      cmake --build . &&
+      ./tests/Debug/tests.exe;
     fi
