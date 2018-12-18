@@ -3,24 +3,31 @@ language: cpp
 matrix:
   fast_finish: true
   include:
-    - os: linux
+    - name: "ubuntu 18.04"
+      os: linux
       services:
         - docker
       env:
-        - BUILD_TARGET=docker_ubuntu_18.04
-    - os: osx
+        - BUILD_TARGET=ubuntu_18.04
+    - name: "osx"
+      os: osx
       addons:
         homebrew:
           packages:
             - eigen
       env:
         - BUILD_TARGET=osx
-    - os: windows
+    - name: "windows"
+      os: windows
       env:
         - BUILD_TARGET=windows
+    - name: "clang-format"
+      os: linux
+      env:
+        - BUILD_TARGET=clang_format
 
 install:
-  - if [ ${BUILD_TARGET} = docker_ubuntu_18.04 ]; then
+  - if [ ${BUILD_TARGET} = ubuntu_18.04 ]; then
       docker build -t build_ubuntu_18.04 -f docker/Dockerfile_ubuntu_18.04 .;
     fi
   - if [ ${BUILD_TARGET} = windows ]; then
@@ -35,7 +42,7 @@ install:
     fi
 
 script:
-  - if [ ${BUILD_TARGET} = docker_ubuntu_18.04 ]; then
+  - if [ ${BUILD_TARGET} = ubuntu_18.04 ]; then
       docker run --rm -it build_ubuntu_18.04;
     fi
   - if [ ${BUILD_TARGET} = osx ]; then
@@ -51,4 +58,15 @@ script:
       cmake -DBUILD_TESTS=ON .. &&
       cmake --build . &&
       ./tests/Debug/tests.exe;
+    fi
+  - if [ ${BUILD_TARGET} = clang_format ]; then
+      sh fix_style.sh ${TRAVIS_BUILD_DIR}
+
+      if git diff-index --quiet HEAD --; then
+        echo "Style check succeeded!";
+      else
+        git diff;
+        echo "ERROR - Style check failed!";
+        return 1;
+      fi
     fi
