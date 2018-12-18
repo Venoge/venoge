@@ -1,6 +1,6 @@
 namespace vng {
 
-    /** Dummy function */
-    void venoge();
+/** Dummy function */
+void venoge();
 
-} // ns: vng
+} // namespace vng

@@ -3,10 +3,7 @@
 #include <stdexcept>
 
 namespace vng {
-    
-    void venoge()
-    {
-        throw std::runtime_error("Go implememt somthinguseful!");
-    }
 
-}
+void venoge() { throw std::runtime_error("Go implememt somthinguseful!"); }
+
+} // namespace vng
